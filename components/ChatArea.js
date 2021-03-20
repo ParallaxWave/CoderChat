@@ -2,6 +2,7 @@ import ChatNav from './ChatNav';
 import Chats from './Chats';
 import Input from './Input';
 
+
 export default function ChatArea(){
   return(
     <>
