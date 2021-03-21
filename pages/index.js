@@ -1,16 +1,6 @@
 import firebase from 'firebase/app';
-import 'firebase/firestore';
 import 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
-
 
 import ChatArea from '../components/ChatArea';
 import Head from 'next/head';
@@ -29,7 +19,6 @@ const config = {
 const firebaseApp = firebase.apps && firebase.apps.length > 0 ? firebase.apps[0] : firebase.initializeApp(config)
 
 const auth = firebase.auth();
-const firestore = firebase.firestore();
 
 
 
@@ -40,34 +29,15 @@ export default function Home() {
 
   return (
    <> 
-     <RecoilRoot>
      { user ? <div><Main/></div>: <SignIn/>}
-     </RecoilRoot>
    </> 
   );
 }
 
 
-  const messageState = atom({
-    key: 'messageState',
-    default: ''
-  });
   
- export const getMessageState = selector({
-  key: 'getMessageState', // unique ID (with respect to other atoms/selectors)
-  get: ({get}) => {
-    const text = get(messageState);
-
-    return text;
-  },
-});
 
 function Main(){
-  const messagesRef = firestore.collection('messages');
-  const query = messagesRef.orderBy('createdAt').limit(25);
-  const [msgFirestore] = useCollectionData(query, { idField: 'id' });
-  const [messages, setMessages] = useRecoilState(messageState);
-  setMessages(msgFirestore);
   
   return (
       <> 
